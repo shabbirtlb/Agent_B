@@ -54,8 +54,8 @@ async def auth(request: Request):
         token = await oauth.google.authorize_access_token(request)
         request.session['user'] = token.get('userinfo')
     except Exception as e:
-        return RedirectResponse(url='http://localhost:3000?error=auth_failed')
-    return RedirectResponse(url='http://localhost:3000/')
+        return RedirectResponse(url='https://agent-f.onrender.com?error=auth_failed')
+    return RedirectResponse(url='https://agent-f.onrender.com/')
 
 @app.get('/api/me')
 async def get_current_user(request: Request):
