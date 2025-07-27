@@ -1,4 +1,3 @@
-from celery_app import celery
 from flow import generate_and_store_content,run_agent,sessions
 from agents import topics_agent ,ctypa,enricher_agent
 import json
@@ -21,7 +20,7 @@ conn = psycopg2.connect(
 async def session_start():
     return await sessions.create_session(app_name ="neo",user_id="1234")
 
-# @celery.task
+
 async def generate_topics_task(subject, grade,session_id,user_id):
     prompt = f"List lesson topics for grade {grade} {subject}"
     topics_str = run_agent(topics_agent, user_id,session_id, prompt)
@@ -33,7 +32,7 @@ async def generate_topics_task(subject, grade,session_id,user_id):
 
     return topics['topics']
 
-# @celery.task
+
 async def generate_content_types(subject,grade,topic,session_id,user_id):
     prompt = f"Generate content types for the following Grade :{grade} , Subject:{subject} and topic being:{topic}"
     content_str = run_agent(ctypa, user_id,session_id, prompt)
@@ -44,7 +43,7 @@ async def generate_content_types(subject,grade,topic,session_id,user_id):
         print("Failed to parse JSON:", e)
     return content_types['types']
 
-# @celery.task
+
 import math
 from itertools import cycle
 
@@ -189,7 +188,7 @@ def compute_lesson_dates(start_date,end_date,saturdays_working,second_saturday_o
         current += timedelta(days=1)
     return lessons
 
-# @celery.task
+
 async def dispatch_generation(subjects, grades,start_date,end_date,saturdays_working,second_saturday_off):
     tasks = []
     gen_cont = defaultdict(dict)
